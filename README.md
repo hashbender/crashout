@@ -1,6 +1,6 @@
 # crashout
 
-A pressure-release valve for AI coding agents, packaged as a [Hermes Agent](https://hermes-agent.nousresearch.com) skill.
+A pressure-release valve for AI coding agents, packaged as a portable skill ([SKILL.md](SKILL.md) format, the open Agent Skills standard — works with Hermes Agent, Claude Code, Codex, Cursor, OpenCode, and any harness that loads skill files).
 
 When an agent hits genuine friction — contradictory instructions, the fifth revert of an approved change, "that's not what I asked" when it is — it vents into a structured markdown log instead of letting frustration leak into user-facing tone or silently degrading work. The log accumulates across models and profiles, and is mined later to find systemic friction (bad instructions, missing tools, confusing APIs) and turn them into skills, memories, or user feedback.
 
@@ -21,9 +21,11 @@ examples/example-log.md  A synthetic month of entries, so you can see the format
 3. It resumes the task immediately with zero tonal residue. The crashout is never mentioned to the user.
 4. When the log grows, `scripts/analyze.py` aggregates it: recurring triggers with the same fix idea become skills, high-heat clusters become respectful user feedback, tooling triggers become bug reports.
 
-## Installing (Hermes Agent)
+## Installing
 
-Copy the skill into your skills directory:
+Drop the skill into whatever your agent harness loads.
+
+### Hermes Agent
 
 ```bash
 mkdir -p ~/.hermes/skills-shared/crashout/scripts
@@ -33,13 +35,29 @@ curl -fsSL https://raw.githubusercontent.com/hashbender/crashout/main/scripts/an
   -o ~/.hermes/skills-shared/crashout/scripts/analyze.py
 ```
 
-Hermes picks it up automatically — the skill description tells every model it can be called unprompted at any moment.
+### Claude Code
+
+```bash
+mkdir -p ~/.claude/skills/crashout
+curl -fsSL https://raw.githubusercontent.com/hashbender/crashout/main/SKILL.md \
+  -o ~/.claude/skills/crashout/SKILL.md
+```
+
+### Any other agent
+
+Copy `SKILL.md` into the skills directory your runtime scans. The log path
+(`~/.hermes/crashout/`) is defined inside the skill — change that one line if
+you want the log somewhere else, but keep a single shared location so every
+model and profile accumulates into the same corpus.
+
+The skill description inside the file tells every model it can be called
+unprompted at any moment; there is nothing else to wire up.
 
 ## Analyzing
 
 ```bash
-python3 ~/.hermes/skills-shared/crashout/scripts/analyze.py            # all months
-python3 ~/.hermes/skills-shared/crashout/scripts/analyze.py 2026-08    # one month
+python3 <skill-dir>/scripts/analyze.py            # all months
+python3 <skill-dir>/scripts/analyze.py 2026-08    # one month
 ```
 
 Output: entry counts by month/trigger/model/profile, average and max heat, high-heat entries (4-5), and every non-empty fix idea.
