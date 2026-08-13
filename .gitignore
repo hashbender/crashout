@@ -1,0 +1,5 @@
+# The runtime crashout logs are personal — never commit them.
+crashout-*.md
+*.log
+__pycache__/
+.DS_Store
