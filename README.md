@@ -9,8 +9,9 @@ The one rule that matters: **the file is the outlet, never the user.** The user-
 ## Contents
 
 ```
-SKILL.md            The skill definition (standing instruction + entry template + analysis guidance)
-scripts/analyze.py  Stdlib-only analyzer: per-month/model/profile histograms, trigger counts, heat stats, fix ideas
+SKILL.md               The skill definition (standing instruction + entry template + analysis guidance)
+scripts/analyze.py     Stdlib-only analyzer: per-month/model/profile histograms, trigger counts, heat stats, fix ideas
+examples/example-log.md  A synthetic month of entries, so you can see the format and test the analyzer
 ```
 
 ## How it works
